@@ -22,7 +22,8 @@ var b = [3,1,3]
 var upper = [0,10,0]
 var lower = [0,-10,0]
 var up = vec3.normalize([],[1,1,1])
-var conepos = [0,6.5,0]
+var coneposUp = [0,6.5,0]
+var coneposLow = [0,-6.5,0]
 var coneclip = [-3,-1.8]
 var mesh = surface([64,64,64], shape, [[-4,-15,-4],[4,15,4]])
 
@@ -31,7 +32,8 @@ function shape (x,y,z) {
   return Math.min(
     rbox(v1, sub(v1,p,upper), b, 0.01),
     rbox(v1, sub(v1,p,lower), b, 0.01),
-    ccone(v1, sub(v2,conepos,p), up, coneclip)
+    ccone(v1, sub(v2,coneposUp,p), up, coneclip),
+    ccone(v1, sub(v2,p,coneposLow), up, coneclip)
   )
 }
 
