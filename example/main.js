@@ -1,5 +1,7 @@
 var column = require('../')
-var mesh = column({})
+var mesh = column({
+  radius: 4
+})
 
 var regl = require('regl')()
 var normals = require('angle-normals')

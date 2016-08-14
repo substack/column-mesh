@@ -4,6 +4,7 @@ var mat4 = require('gl-mat4')
 var defined = require('defined')
 
 var length = vec3.length, sub = vec3.subtract, scale = vec3.scale
+var multiply = vec3.multiply
 var max = vec3.max, min = vec3.min, dot = vec3.dot
 var abs = elwise(Math.abs), sqrt = elwise(Math.sqrt)
 var z3 = [0,0,0]
@@ -27,7 +28,7 @@ module.exports = function (opts) {
   var baseLen = defined(opts.baseLength, radius * Math.sqrt(2.3))
   var shr = Math.max(radius, capLen, baseLen) * 1.1
 
-  var v1 = [0,0,0], v2 = [0,0,0]
+  var v1 = [0,0,0], v2 = [0,0,0], v3 = [0,0,0]
   var p = [0,0,0]
   var bhi = [capLen,0.5,capLen]
   var blo = [baseLen,0.5,baseLen]
@@ -59,10 +60,16 @@ module.exports = function (opts) {
     return Math.min(
       rbox(v1, sub(v1,p,upper), bhi, 0.01),
       rbox(v1, sub(v1,p,lower), blo, 0.01),
-      ccone(v1, sub(v2,coneposUp,p), up, coneclip),
-      ccone(v1, sub(v2,p,coneposLow), up, coneclip),
+      ccone(v1, sub(v2,coneposUp,scaleCone(v3,p)), up, coneclip),
+      ccone(v1, sub(v2,scaleCone(v3,p),coneposLow), up, coneclip),
       cymax
     )
+  }
+  function scaleCone (out, p) {
+    out[0] = 2/radius
+    out[1] = 1
+    out[2] = 2/radius
+    return multiply(out, p, out)
   }
 }
 
