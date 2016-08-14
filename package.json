@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "budo": "^8.3.0",
+    "es2020": "^1.1.8",
     "isosurface": "^1.0.0",
     "regl-camera": "^1.0.0"
   }
