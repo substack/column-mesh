@@ -25,15 +25,17 @@ module.exports = function (opts) {
   var fluteRadius = defined(opts.fluteRadius, 0.5)
   var fluteDistance = defined(opts.fluteDistance, radius + fluteRadius * 0.6)
   var capLen = defined(opts.capitalLength, radius * Math.sqrt(2.3))
+  var capHeight = defined(opts.capitalHeight, 0.5)
   var baseLen = defined(opts.baseLength, radius * Math.sqrt(2.3))
+  var baseHeight = defined(opts.baseHeight, 0.5)
   var height = defined(opts.height, 20) / 2
   var shr = Math.max(radius, capLen, baseLen) * 1.1
   var shh = height + 1
 
   var v1 = [0,0,0], v2 = [0,0,0], v3 = [0,0,0]
   var p = [0,0,0]
-  var bhi = [capLen,0.5,capLen]
-  var blo = [baseLen,0.5,baseLen]
+  var bhi = [capLen,capHeight,capLen]
+  var blo = [baseLen,baseHeight,baseLen]
   var upper = [0,height,0]
   var lower = [0,-height,0]
   var up = vec3.normalize([],[1,1,1])
@@ -49,7 +51,9 @@ module.exports = function (opts) {
     var z = fluteDistance * Math.sin(theta)
     caps.push([ [x,2.3-height,z], [x,height-2.3,z] ])
   }
-  return surface([64,64,64], shape, [[-shr,-shh,-shr],[shr,shh,shr]])
+  return surface([64,64,64], shape, [
+    [-shr,-shh-baseHeight,-shr],[shr,shh+capHeight,shr]
+  ])
 
   function shape (x,y,z) {
     p[0] = x, p[1] = y, p[2] = z
@@ -60,8 +64,8 @@ module.exports = function (opts) {
       if (x > cymax) cymax = x
     }
     return Math.min(
-      rbox(v1, sub(v1,p,upper), bhi, 0.01),
-      rbox(v1, sub(v1,p,lower), blo, 0.01),
+      rbox(v1, sub(v1,capShift(v1,p),upper), bhi, 0.01),
+      rbox(v1, sub(v1,baseShift(v1,p),lower), blo, 0.01),
       ccone(v1, sub(v2,coneposUp,scaleCone(v3,p)), up, coneclip),
       ccone(v1, sub(v2,scaleCone(v3,p),coneposLow), up, coneclip),
       cymax
@@ -72,6 +76,18 @@ module.exports = function (opts) {
     out[1] = 1
     out[2] = 2/radius
     return multiply(out, p, out)
+  }
+  function capShift (out, p) {
+    out[0] = p[0]
+    out[1] = p[1] - (capHeight - 0.5)
+    out[2] = p[2]
+    return out
+  }
+  function baseShift (out, p) {
+    out[0] = p[0]
+    out[1] = p[1] + (baseHeight - 0.5)
+    out[2] = p[2]
+    return out
   }
 }
 
