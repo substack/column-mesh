@@ -1,9 +1,10 @@
 var column = require('../')
-var mesh = column()
+var mesh = column({})
 
 var regl = require('regl')()
 var normals = require('angle-normals')
 var camera = require('regl-camera')(regl, { center: [25,0,0] })
+var mat4 = require('gl-mat4')
 var rmat = []
 
 var draw = regl({
