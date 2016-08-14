@@ -18,15 +18,15 @@ function elwise (f) {
 var v1 = [0,0,0], v2 = [0,0,0]
 var p = [0,0,0]
 var z3 = [0,0,0]
-var b = [3,1,3]
+var b = [3,0.5,3]
 var upper = [0,10,0]
 var lower = [0,-10,0]
 var up = vec3.normalize([],[1,1,1])
 var coneposUp = [0,6.5,0]
 var coneposLow = [0,-6.5,0]
 var coneclip = [-3,-1.8]
-var cyh = [2,8]
-var mesh = surface([64,64,64], shape, [[-4,-15,-4],[4,15,4]])
+var cyh = [2,9]
+var mesh = surface([64,64,64], shape, [[-3.2,-11,-3.2],[3.2,11,3.2]])
 
 function shape (x,y,z) {
   p[0] = x, p[1] = y, p[2] = z
