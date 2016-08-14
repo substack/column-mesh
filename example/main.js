@@ -25,6 +25,7 @@ var up = vec3.normalize([],[1,1,1])
 var coneposUp = [0,6.5,0]
 var coneposLow = [0,-6.5,0]
 var coneclip = [-3,-1.8]
+var cyh = [2,8]
 var mesh = surface([64,64,64], shape, [[-4,-15,-4],[4,15,4]])
 
 function shape (x,y,z) {
@@ -33,7 +34,8 @@ function shape (x,y,z) {
     rbox(v1, sub(v1,p,upper), b, 0.01),
     rbox(v1, sub(v1,p,lower), b, 0.01),
     ccone(v1, sub(v2,coneposUp,p), up, coneclip),
-    ccone(v1, sub(v2,p,coneposLow), up, coneclip)
+    ccone(v1, sub(v2,p,coneposLow), up, coneclip),
+    cylinder(v1, p, cyh)
   )
 }
 
@@ -44,6 +46,15 @@ function ccone (tmp, p, c, clip) {
   tmp[1] = p[1]
   tmp[2] = 0
   return dot(c,tmp)
+}
+
+function cylinder (tmp, p, h) {
+  tmp[0] = p[0], tmp[1] = p[2], tmp[2] = 0
+  var dx = Math.abs(length(tmp)) - h[0]
+  var dy = Math.abs(p[1]) - h[1]
+  tmp[0] = dx, tmp[1] = dy, tmp[2] = 0
+  return Math.min(Math.max(dx,dy),0)
+    + length(max(tmp, tmp, z3))
 }
 
 function rbox (tmp, p, b, r) {
