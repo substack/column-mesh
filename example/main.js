@@ -1,6 +1,7 @@
 var column = require('../')
 var mesh = column({
-  radius: 4
+  radius: 4,
+  height: 40
 })
 
 var regl = require('regl')()

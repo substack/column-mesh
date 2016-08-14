@@ -26,28 +26,30 @@ module.exports = function (opts) {
   var fluteDistance = defined(opts.fluteDistance, radius + fluteRadius * 0.6)
   var capLen = defined(opts.capitalLength, radius * Math.sqrt(2.3))
   var baseLen = defined(opts.baseLength, radius * Math.sqrt(2.3))
+  var height = defined(opts.height, 20) / 2
   var shr = Math.max(radius, capLen, baseLen) * 1.1
+  var shh = height + 1
 
   var v1 = [0,0,0], v2 = [0,0,0], v3 = [0,0,0]
   var p = [0,0,0]
   var bhi = [capLen,0.5,capLen]
   var blo = [baseLen,0.5,baseLen]
-  var upper = [0,10,0]
-  var lower = [0,-10,0]
+  var upper = [0,height,0]
+  var lower = [0,-height,0]
   var up = vec3.normalize([],[1,1,1])
-  var coneposUp = [0,6.5,0]
-  var coneposLow = [0,-6.5,0]
+  var coneposUp = [0,height-3.5,0]
+  var coneposLow = [0,3.5-height,0]
   var coneclip = [-3,-1.8]
-  var cyh = [radius,9]
+  var cyh = [radius,height-1]
 
   var caps = []
   for (var i = 0; i < flutes; i++) {
     var theta = i / flutes * Math.PI*2
     var x = fluteDistance * Math.cos(theta)
     var z = fluteDistance * Math.sin(theta)
-    caps.push([ [x,-7.7,z], [x,7.7,z] ])
+    caps.push([ [x,2.3-height,z], [x,height-2.3,z] ])
   }
-  return surface([64,64,64], shape, [[-shr,-11,-shr],[shr,11,shr]])
+  return surface([64,64,64], shape, [[-shr,-shh,-shr],[shr,shh,shr]])
 
   function shape (x,y,z) {
     p[0] = x, p[1] = y, p[2] = z
