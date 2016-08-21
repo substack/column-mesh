@@ -1,4 +1,6 @@
-var surface = require('isosurface').surfaceNets
+var surfaceNets = require('surface-nets')
+var ndarray = require('ndarray')
+var fill = require('ndarray-fill')
 var vec3 = require('gl-vec3')
 var mat4 = require('gl-mat4')
 var defined = require('defined')
@@ -51,9 +53,14 @@ module.exports = function (opts) {
     var z = fluteDistance * Math.sin(theta)
     caps.push([ [x,2.3-height,z], [x,height-2.3,z] ])
   }
-  return surface([64,64,64], shape, [
-    [-shr,-shh-baseHeight,-shr],[shr,shh+capHeight,shr]
-  ])
+  var data = ndarray(new Float64Array(64*64*64),[64,64,64])
+  fill(data, function (i,j,k) {
+    var x = ((i/64)*2-1)*shr
+    var y = ((j/64)*2-1)*(shh+baseHeight+capHeight)
+    var z = ((k/64)*2-1)*shr
+    return shape(x,y,z)
+  })
+  return surfaceNets(data)
 
   function shape (x,y,z) {
     p[0] = x, p[1] = y, p[2] = z
