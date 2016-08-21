@@ -1,12 +1,16 @@
 var column = require('../')
 var mesh = column({
   radius: 2,
-  height: 10
+  height: 20
 })
 
 var regl = require('regl')()
 var normals = require('angle-normals')
-var camera = require('regl-camera')(regl, { center: [25,0,0] })
+var camera = require('regl-camera')(regl, {
+  center: [0,0,0],
+  eye: [0,0,1],
+  distance: 30
+})
 var mat4 = require('gl-mat4')
 var rmat = []
 

@@ -55,12 +55,22 @@ module.exports = function (opts) {
   }
   var data = ndarray(new Float64Array(64*64*64),[64,64,64])
   fill(data, function (i,j,k) {
-    var x = ((i/64)*2-1)*shr
-    var y = ((j/64)*2-1)*(shh+baseHeight+capHeight)
-    var z = ((k/64)*2-1)*shr
+    var x = ((i/63)*2-1)*shr
+    var y = ((j/63)*2-1)*(shh+baseHeight+capHeight)
+    var z = ((k/63)*2-1)*shr
     return shape(x,y,z)
   })
-  return surfaceNets(data)
+  return scaler(surfaceNets(data))
+
+  function scaler (mesh) {
+    for (var i = 0; i < mesh.positions.length; i++) {
+      var m = mesh.positions[i]
+      m[0] = (m[0]/63*2-1)*shr
+      m[1] = (m[1]/63*2-1)*(shh+baseHeight+capHeight)
+      m[2] = (m[2]/63*2-1)*shr
+    }
+    return mesh
+  }
 
   function shape (x,y,z) {
     p[0] = x, p[1] = y, p[2] = z
